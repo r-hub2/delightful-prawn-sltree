@@ -1,0 +1,59 @@
+Package: sltree
+Type: Package
+Title: Structure Learning for Semiparametric/Latent Tree Models
+Version: 0.1.0
+Authors@R: c(
+    person("Can", "Zhou", email = "zhouc@nau.edu.cn", role = c("aut", "cre")),
+    person("Shuai", "Wang", email = "wangshuai2@usth.edu.cn", role = "aut"),
+    person("Xiaofei", "Wang", email = "wangxf341@nenu.edu.cn", role = "aut"),
+    person("Jianhua", "Guo", email = "jhguo@btbu.edu.cn", role = "aut"),
+    person("Alan", "Genz", role = c("ctb", "cph"), comment = "TVPACK BVND"),
+    person("R Core Team", role = "cph", comment = "Brent_fmin"),
+    person("Mingze", "Huang", role = c("ctb", "cph"), comment = "latentcor"),
+    person("Grace", "Yoon", role = c("ctb", "cph"), comment = "latentcor"),
+    person("Christian", "Müller", role = c("ctb", "cph"), comment = "latentcor"),
+    person("Irina", "Gaynanova", role = c("ctb", "cph"), comment = "latentcor"))
+Description: Learns the structure of Gaussian latent tree models (LTMs), 
+    discrete LTMs, parametric mixed LTMs, and semiparametric tree models
+    using information distances and a bottom-up tree reconstruction
+    algorithm. Gaussian models and parametric mixed models with binary
+    and conditionally Gaussian variables use Pearson-correlation-based
+    distances. Discrete models use determinant-based distances and
+    require the same number of observed states across variables.
+    Semiparametric models accommodate continuous, binary, and ordinal
+    variables, with latent correlations estimated under a Gaussian
+    copula model using Kendall's tau and bridge functions. Utilities
+    are provided for data simulation, tree visualization and export,
+    and topology comparison using the Robinson-Foulds distance.
+    The semiparametric and parametric mixed methodologies are described
+    in Zhou et al. (2026) <doi:10.1016/j.artint.2026.104499> and
+    Zhou et al. (2020) <https://jmlr.org/papers/v21/20-365.html>, respectively.
+License: GPL-3
+Copyright: See the file inst/COPYRIGHTS.
+Encoding: UTF-8
+Collate: 'RcppExports.R' 'data_generation.R' 'information_distance.R'
+        'learn.R' 'ltree_accessors.R' 'ltree_export.R' 'ltree_plot.R'
+        'ltree_state.R' 'preset_models.R' 'sls_internal.R' 'sls.R'
+        'sltree-package.R' 'tree_structure.R'
+Imports: utils, stats, methods, grDevices, graphics, igraph (>= 1.2.5),
+        mvtnorm, pcaPP, Rcpp
+LinkingTo: Rcpp
+Suggests: Matrix, pcalg, graph, visNetwork, testthat (>= 3.0.0), knitr,
+        rmarkdown
+Depends: R (>= 3.6.0)
+NeedsCompilation: yes
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Config/roxygen2/version: 8.1.1
+Packaged: 2026-10-25 14:21:52 UTC; 13006
+Author: Can Zhou [aut, cre],
+  Shuai Wang [aut],
+  Xiaofei Wang [aut],
+  Jianhua Guo [aut],
+  Alan Genz [ctb, cph] (TVPACK BVND),
+  R Core Team [cph] (Brent_fmin),
+  Mingze Huang [ctb, cph] (latentcor),
+  Grace Yoon [ctb, cph] (latentcor),
+  Christian Müller [ctb, cph] (latentcor),
+  Irina Gaynanova [ctb, cph] (latentcor)
+Maintainer: Can Zhou <zhouc@nau.edu.cn>

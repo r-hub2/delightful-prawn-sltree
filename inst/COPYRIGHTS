@@ -1,0 +1,56 @@
+The sltree package is Copyright (C) Can Zhou, Shuai Wang and Xiaofei Wang,
+and is licensed under GPL-3, with the following exceptions.
+
+
+src/latent_cpp.cpp: bvnd()
+
+Translated from the Fortran function BVND in TVPACK by Alan Genz,
+http://www.math.wsu.edu/faculty/genz/software/fort77/tvpack.f
+
+  Copyright (C) 2013, Alan Genz,  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided the following conditions are met:
+    1. Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
+    2. Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer in
+       the documentation and/or other materials provided with the
+       distribution.
+    3. The contributor name(s) may not be used to endorse or promote
+       products derived from this software without specific prior
+       written permission.
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Reference: Genz, A. Numerical computation of rectangular bivariate and
+trivariate normal and t probabilities. Statistics and Computing 14,
+251-260 (2004). https://doi.org/10.1023/B:STCO.0000035304.20635.31
+
+
+src/latent_cpp.cpp: Brent_fmin()
+
+Ported from Brent_fmin() in R's src/library/stats/src/optimize.c,
+licensed under GPL (>= 2).
+
+  Copyright (C) 1998--2025  The R Core Team
+  Copyright (C) 1995, 1996  Robert Gentleman and Ross Ihaka
+  Copyright (C) 2003-2004  The R Foundation
+
+
+R/information_distance.R: .kendall_tau_a_validated()
+
+Adapted from Kendalltau() and n_x() in the latentcor package,
+https://CRAN.R-project.org/package=latentcor, licensed under GPL-3.
+
+  Copyright (C) Mingze Huang, Grace Yoon, Christian Müller and
+  Irina Gaynanova

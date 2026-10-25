@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to sltree</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to sltree</h1>
+
+
+
+<p><code>sltree</code> learns latent tree structures from data with
+continuous, binary and ordinal variables. Latent correlations are
+estimated under a Gaussian copula, converted to information distances,
+and the SLS algorithm recovers the latent nodes and the tree topology
+from the bottom up.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(sltree)</span></code></pre></div>
+<div id="a-true-tree" class="section level2">
+<h2>1. A true tree</h2>
+<p><code>latent_tree_models()</code> contains six preset trees.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">latent_tree_models</span>(<span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">head</span>(model)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;    nodes              type parent</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; V1    V1   observed_binary     H1</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; V2    V2   observed_binary     H1</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; V3    V3 observed_Gaussian     H2</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; V4    V4 observed_Gaussian     H2</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; V5    V5 observed_Gaussian     H3</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; V6    V6 observed_Gaussian     H3</span></span></code></pre></div>
+<p><code>view_ltree()</code> also accepts a preset number. By default it
+draws an interactive plot with visNetwork, or a static plot if
+visNetwork is not installed.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">view_ltree</span>(<span class="dv">1</span>)                        <span class="co"># direction = &quot;LR&quot; suits trees with many leaves</span></span></code></pre></div>
+<p>In the static plot latent nodes are circles and observed nodes are
+coloured by type. The plot returns the <code>ltree</code> object.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>preset_tree <span class="ot">&lt;-</span> <span class="fu">view_ltree</span>(<span class="dv">1</span>, <span class="st">&quot;plot&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="simulating-data" class="section level2">
+<h2>2. Simulating data</h2>
+<p><code>simulate_ltree_data()</code> can generate data from the preset
+models; it needs the pcalg and graph packages.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">simulate_ltree_data</span>(<span class="at">n =</span> <span class="fl">1e5</span>, <span class="at">model =</span> model)</span></code></pre></div>
+<p>For a small reproducible example using only the package’s required
+dependencies, consider four observed variables with one common latent
+Gaussian parent. We generate 400 observations and transform two columns
+to binary and ordinal variables. The continuous transformations are
+monotone, so all four columns follow the semi-parametric model.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">400</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>gaussian_x <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">replicate</span>(<span class="dv">4</span>, <span class="fl">0.8</span> <span class="sc">*</span> h <span class="sc">+</span> <span class="fl">0.6</span> <span class="sc">*</span> <span class="fu">rnorm</span>(n)))</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">names</span>(gaussian_x) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">V1 =</span> <span class="fu">exp</span>(gaussian_x<span class="sc">$</span>V1),</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="at">V2 =</span> gaussian_x<span class="sc">$</span>V2<span class="sc">^</span><span class="dv">3</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="at">V3 =</span> <span class="fu">as.integer</span>(gaussian_x<span class="sc">$</span>V3 <span class="sc">&gt;</span> <span class="dv">0</span>),</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="at">V4 =</span> <span class="fu">findInterval</span>(gaussian_x<span class="sc">$</span>V4, <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>))</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="fu">head</span>(x)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;           V1          V2 V3 V4</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; 1 0.18236563 -3.94440391  0  0</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; 2 1.27587870 -0.22770396  1  0</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; 3 1.84913336  0.58852318  1  2</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; 4 0.08926223 -0.49300478  0  0</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; 5 1.81079240  0.02280814  1  1</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; 6 1.64363714  0.66120197  1  1</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>true_edges <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  <span class="at">node =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">&quot;V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>), <span class="st">&quot;H1&quot;</span>),</span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>  <span class="at">parent =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;H1&quot;</span>, <span class="dv">4</span>), <span class="st">&quot;&quot;</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>)</span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>true_types <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;continuous&quot;</span>, <span class="st">&quot;continuous&quot;</span>, <span class="st">&quot;binary&quot;</span>, <span class="st">&quot;ordinal&quot;</span>, <span class="st">&quot;latent&quot;</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>true_tree <span class="ot">&lt;-</span> <span class="fu">ltree_from_edge</span>(true_edges, true_types)</span></code></pre></div>
+</div>
+<div id="learning-the-tree" class="section level2">
+<h2>3. Learning the tree</h2>
+<p><code>learn_sltree()</code> computes the information distance and
+passes it to <code>sls()</code>. With the default
+<code>model = &quot;stm&quot;</code> it infers the variable types, estimates the
+latent correlations, projects them with <code>nearPD</code> when Matrix
+is available, and uses <code>-log|rho|</code> as the distance. Here we
+set <code>use_near_pd = FALSE</code> so the example also runs without
+Matrix. The intermediate results show the inferred variable types and
+estimated information distances.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">learn_sltree</span>(x, <span class="at">tau1 =</span> <span class="dv">3</span>, <span class="at">tau2 =</span> <span class="dv">5</span>, <span class="at">use_near_pd =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                   <span class="at">return_intermediate =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>est_tree <span class="ot">&lt;-</span> fit<span class="sc">$</span>tree</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>fit<span class="sc">$</span>variable_types</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;continuous&quot; &quot;continuous&quot; &quot;binary&quot;     &quot;ordinal&quot;</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">round</span>(fit<span class="sc">$</span>distance, <span class="dv">3</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;       V1    V2    V3    V4</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; V1 0.000 0.419 0.413 0.401</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; V2 0.419 0.000 0.424 0.446</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; V3 0.413 0.424 0.000 0.429</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; V4 0.401 0.446 0.429 0.000</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="fu">edges_from_ltree</span>(est_tree)</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;   nodes parent</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 1    V1     H1</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 2    V2     H1</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; 3    V3     H1</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; 4    V4     H1</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">view_ltree</span>(est_tree, <span class="st">&quot;plot&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>Interactive viewing and file export are also available:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">view_ltree</span>(est_tree)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">save_ltree</span>(est_tree, <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;est_tree&quot;</span>))  <span class="co"># PNG, EPS and HTML</span></span></code></pre></div>
+<p>The Gaussian, discrete and parametric mixed models use the same
+learning interface. Discrete variables must all have the same number of
+observed states; the parametric mixed model accepts binary and
+conditionally Gaussian variables.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>tree_gaussian <span class="ot">&lt;-</span> <span class="fu">learn_sltree</span>(gaussian_x, <span class="at">model =</span> <span class="st">&quot;gaussian&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>h_binary <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>discrete_x <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">replicate</span>(<span class="dv">4</span>, <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.8</span> <span class="sc">*</span> h_binary)))</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">names</span>(discrete_x) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>tree_discrete <span class="ot">&lt;-</span> <span class="fu">learn_sltree</span>(discrete_x, <span class="at">model =</span> <span class="st">&quot;discrete&quot;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>mixed_x <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">V1 =</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">2</span> <span class="sc">*</span> h_binary <span class="sc">-</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="fl">0.6</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">V2 =</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">2</span> <span class="sc">*</span> h_binary <span class="sc">-</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="fl">0.6</span>),</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="at">V3 =</span> discrete_x<span class="sc">$</span>V3,</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="at">V4 =</span> discrete_x<span class="sc">$</span>V4</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>tree_mixed <span class="ot">&lt;-</span> <span class="fu">learn_sltree</span>(mixed_x, <span class="at">model =</span> <span class="st">&quot;mixed&quot;</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="fu">c</span>(<span class="at">stm =</span> <span class="fu">is_ltree</span>(est_tree), <span class="at">gaussian =</span> <span class="fu">is_ltree</span>(tree_gaussian),</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  <span class="at">discrete =</span> <span class="fu">is_ltree</span>(tree_discrete), <span class="at">mixed =</span> <span class="fu">is_ltree</span>(tree_mixed))</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt;      stm gaussian discrete    mixed </span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt;     TRUE     TRUE     TRUE     TRUE</span></span></code></pre></div>
+<p>The <code>stm</code>, <code>gaussian</code> and <code>discrete</code>
+models allow observed variables to be internal nodes; the parametric
+<code>mixed</code> model restricts them to leaves. Only <code>stm</code>
+uses <code>nearPD</code> by default; set <code>use_near_pd</code> to
+change this.</p>
+<p>The same steps can be run one at a time:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>variable_types <span class="ot">&lt;-</span> <span class="fu">infer_variable_types</span>(x)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>correlation <span class="ot">&lt;-</span> <span class="fu">latent_correlation</span>(x, variable_types)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>distance <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="fu">abs</span>(correlation)); <span class="fu">diag</span>(distance) <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>tree_from_steps <span class="ot">&lt;-</span> <span class="fu">sls</span>(distance, <span class="at">tau1 =</span> <span class="dv">3</span>, <span class="at">tau2 =</span> <span class="dv">5</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>                       <span class="at">node_types =</span> variable_types, <span class="at">node_names =</span> <span class="fu">colnames</span>(x))</span></code></pre></div>
+</div>
+<div id="comparing-with-the-true-tree" class="section level2">
+<h2>4. Comparing with the true tree</h2>
+<p>The RF distance compares the observed-node splits and ignores
+latent-node names and the root position. Finite samples need not recover
+the exact true tree; a value of zero indicates complete recovery in this
+example.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">robinson_foulds_distance</span>(true_tree, est_tree)   <span class="co"># 0 if fully recovered</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+</div>
+<div id="observed-internal-nodes" class="section level2">
+<h2>5. Observed internal nodes</h2>
+<p><code>allow_observed_internal</code> controls whether observed
+variables may be internal nodes. In <code>sls()</code> it defaults to
+<code>TRUE</code>; in <code>learn_sltree()</code> the default depends on
+the model.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
