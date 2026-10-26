@@ -1,9 +1,9 @@
 # sltree
 
-Structure learning for semi-parametric latent tree models from mixed
+Structure learning for semi-parametric/latent tree models from mixed
 continuous, binary and ordinal data.
 
-Authors: Can Zhou, Shuai Wang, Xiaofei Wang.
+Authors: Can Zhou, Shuai Wang, Xiaofei Wang, Jianhua Guo.
 
 Latent correlations are estimated under a Gaussian copula by inverting the
 bridge functions between Kendall's tau and the latent Pearson correlation.
@@ -120,6 +120,14 @@ save_ltree(est_tree, "estimated_tree",
            plot_args = list(main = "Recovered tree"),
            png_args = list(res = 300))
 ```
+
+## Acknowledgments
+The research underlying this package was supported by the Key Program of 
+the National Natural Science Foundation of China (Grant No. 12431009), 
+the National Key Research and Development Program of China (Grant No. 
+2020YFA0714100), the National Natural Science Foundation of China 
+(Grant Nos. 12171076 and 12226003), and the Natural Science Foundation
+of Jiangsu Province (Grant No. BK20230439).
 
 ## References
 

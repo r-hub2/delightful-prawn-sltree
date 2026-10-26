@@ -7,6 +7,14 @@ Authors@R: c(
     person("Shuai", "Wang", email = "wangshuai2@usth.edu.cn", role = "aut"),
     person("Xiaofei", "Wang", email = "wangxf341@nenu.edu.cn", role = "aut"),
     person("Jianhua", "Guo", email = "jhguo@btbu.edu.cn", role = "aut"),
+    person(given = "Key Program of the National Natural Science Foundation of China",
+           role = "fnd", comment = c("Grant No. 12431009")),
+    person(given = "National Natural Science Foundation of China",
+           role = "fnd", comment = c("Grant No. 12171076, 12226003")),
+    person(given = "National Key Research and Development Program of China",
+           role = "fnd", comment = "Grant No. 2020YFA0714100"),
+    person(given = "Basic Research Program of Jiangsu", role = "fnd", 
+           comment = "Grant No. BK20230439"),
     person("Alan", "Genz", role = c("ctb", "cph"), comment = "TVPACK BVND"),
     person("R Core Team", role = "cph", comment = "Brent_fmin"),
     person("Mingze", "Huang", role = c("ctb", "cph"), comment = "latentcor"),
@@ -25,9 +33,13 @@ Description: Learns the structure of Gaussian latent tree models (LTMs),
     copula model using Kendall's tau and bridge functions. Utilities
     are provided for data simulation, tree visualization and export,
     and topology comparison using the Robinson-Foulds distance.
-    The semiparametric and parametric mixed methodologies are described
-    in Zhou et al. (2026) <doi:10.1016/j.artint.2026.104499> and
-    Zhou et al. (2020) <https://jmlr.org/papers/v21/20-365.html>, respectively.
+    The semiparametric framework allowing observed internal nodes is
+    described in Zhou et al. (2026) <doi:10.1016/j.artint.2026.104499>.
+    Earlier structure-learning methods assuming that all observed
+    variables are leaf nodes are described for discrete models in
+    Wang et al. (2017) <doi:10.4310/SII.2017.v10.n4.a11> and for
+    parametric mixed models in Zhou et al. (2020)
+    <https://jmlr.org/papers/v21/20-365.html>.
 License: GPL-3
 Copyright: See the file inst/COPYRIGHTS.
 Encoding: UTF-8
@@ -45,11 +57,18 @@ NeedsCompilation: yes
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.1
-Packaged: 2026-10-25 14:21:52 UTC; 13006
+Packaged: 2026-10-26 15:16:35 UTC; 13006
 Author: Can Zhou [aut, cre],
   Shuai Wang [aut],
   Xiaofei Wang [aut],
   Jianhua Guo [aut],
+  Key Program of the National Natural Science Foundation of China [fnd]
+    (Grant No. 12431009),
+  National Natural Science Foundation of China [fnd] (Grant No. 12171076,
+    12226003),
+  National Key Research and Development Program of China [fnd] (Grant No.
+    2020YFA0714100),
+  Basic Research Program of Jiangsu [fnd] (Grant No. BK20230439),
   Alan Genz [ctb, cph] (TVPACK BVND),
   R Core Team [cph] (Brent_fmin),
   Mingze Huang [ctb, cph] (latentcor),
